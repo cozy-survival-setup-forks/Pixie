@@ -1,0 +1,30 @@
+# Texts. MiniMessage, & codes and &#rrggbb all work. Leave one empty to turn it off.
+# %trail% and %player% are filled in.
+
+prefix: "&#FF9BD2&lTRAILS &8» "
+
+no-permission: "&cYou do not have this trail."
+players-only: "&cOnly players can do this."
+unknown-trail: "&cThere is no trail with that name."
+equipped: "&fYour trail is now &#FFE066%trail%&f."
+removed: "&fYour trail is gone."
+no-trail: "&cYou do not have a trail. Pick one with /trail <name>."
+paused: "&fYour trail is &cpaused&f. Use /trail toggle to bring it back."
+resumed: "&fYour trail is &aback&f."
+seeing: "&fYou see trails again."
+not-seeing: "&fYou no longer see any trails, not even yours. Use /trail visibility to see them again."
+list-empty: "&fYou do not have any trails yet."
+list-header: "&fYour trails:"
+list-entry: "&8▸ &f%trail%"
+admin-set: "&fGave %player% the trail &#FFE066%trail%&f."
+admin-cleared: "&fRemoved the trail of %player%."
+player-not-found: "&cThat player is not online."
+reloaded: "&fReloaded. There are %amount% trails."
+
+usage:
+  - "&#FF9BD2&lTrails"
+  - "&f/trail <name> &7- pick a trail"
+  - "&f/trail off &7- remove it"
+  - "&f/trail toggle &7- pause or bring back your trail"
+  - "&f/trail visibility &7- see or hide all trails, yours too"
+  - "&f/trail list &7- the trails you can use"

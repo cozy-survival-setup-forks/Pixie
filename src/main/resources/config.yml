@@ -1,0 +1,24 @@
+# Shimmer
+#
+# The trails are in trails.yml and the texts in lang.yml. Reload both with /trail reload.
+
+# false lets everybody use every trail.
+use-permissions: true
+
+# Worlds where nobody shows a trail.
+disabled-worlds: []
+
+# Show the trail of a player who is invisible (a potion). Vanished players never show one.
+show-when-invisible: false
+
+# Particles cost the connection of every player nearby, so Shimmer is careful with them.
+performance:
+  # The most puffs sent in one tick for the whole server. What does not fit waits for the next tick, and everybody
+  # gets a fair turn.
+  budget-per-tick: 60
+  # Slow the trails down when the server is struggling, and stop them when it is badly lagging.
+  lag-guard: true
+  # Average milliseconds per tick above which trails send half as often.
+  slow-above-ms: 40
+  # Average milliseconds per tick above which trails stop until the server recovers.
+  pause-above-ms: 47

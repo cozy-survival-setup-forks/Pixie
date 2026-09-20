@@ -1,0 +1,528 @@
+# Shimmer trails. This file holds trails and nothing else.
+#
+# Each trail has a display name and layers of particles that are sent while the player moves.
+# A player needs the permission shimmer.trail.<id> (shimmer.trail.* gives all of them), or the one written in `permission`.
+# Players pick one with /trail <id>.
+#
+# Trail settings
+#   display      the name in /trail list and menus (default: the id)
+#   permission   replaces shimmer.trail.<id>
+#   interval     ticks between two puffs (default 3). Bigger is lighter for everybody's connection
+#   moving       false to show the trail even when the player stands still (default true)
+#
+# Layer settings
+#   particle     any particle name, such as DUST, END_ROD, FLAME, HEART
+#   shape        SCATTER a cloud around the feet (default), RING points on a turning circle, HELIX two points that climb
+#                the body, ORBIT one point that circles the waist
+#   count        particles per puff. SCATTER sends them as one packet, whatever the count (default 1, at most 30)
+#   spread       SCATTER: how wide the cloud is, in blocks (default 0.25)
+#   height       SCATTER: how tall the cloud is (default 0.15). For HELIX, how high the spiral climbs
+#   radius       RING, HELIX and ORBIT: size of the circle (default 0.4)
+#   points       RING: how many points (default 4, at most 8)
+#   offset       [x, y, z] moves the layer, y is up (default [0, 0.05, 0])
+#   speed        how fast the particle drifts (default 0)
+#
+# Colours, for the particles that use them
+#   colors       #rrggbb list. The puffs use them one after the other, so a layer with three colours shows all three
+#   to           DUST_COLOR_TRANSITION: the colours it fades to, paired with `colors`
+#   size         DUST and DUST_COLOR_TRANSITION: how big the dust is (default 1.0)
+#   block        BLOCK, FALLING_DUST...: a list of block names
+#   item         ITEM: a list of item names
+#   notes        NOTE: a list of notes from 0 to 24
+
+trails:
+  yellow_pink:
+    display: "Yellow Pink"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#FFC0CB", "#FFF200", "#FFFFFF"]
+        size: 1.1
+        count: 4
+        spread: 0.22
+        height: 0.12
+      - particle: END_ROD
+        count: 1
+        spread: 0.15
+        height: 0.1
+        speed: 0.01
+
+  sunset:
+    display: "Sunset"
+    interval: 2
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#FF512F", "#FF8A00", "#FFD200"]
+        to: ["#FF5E9C", "#FF2E63", "#FF9A8B"]
+        size: 1.2
+        count: 4
+        spread: 0.24
+        height: 0.14
+
+  ocean:
+    display: "Ocean"
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#00C6FF", "#0072FF"]
+        to: ["#7FF0FF", "#5AA9FF"]
+        size: 1.1
+        count: 4
+        spread: 0.24
+        height: 0.12
+      - particle: BUBBLE_POP
+        count: 1
+        spread: 0.2
+        height: 0.2
+
+  aurora:
+    display: "Aurora"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#00FF87", "#60EFFF", "#C471ED", "#7CFFB2"]
+        size: 1.2
+        count: 3
+        spread: 0.26
+        height: 0.16
+      - particle: END_ROD
+        shape: ORBIT
+        radius: 0.5
+        y: 0.9
+        count: 1
+
+  cotton_candy:
+    display: "Cotton Candy"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#FFB6E1", "#B5DEFF", "#FFFFFF"]
+        size: 1.3
+        count: 4
+        spread: 0.25
+        height: 0.14
+
+  lavender:
+    display: "Lavender"
+    interval: 2
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#B57EDC", "#E6C7FF"]
+        to: ["#7A5AF8", "#C9A0FF"]
+        size: 1.1
+        count: 4
+        spread: 0.22
+        height: 0.12
+
+  peach:
+    display: "Peach"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#FFB68A", "#FFD1B3", "#FF8FA3"]
+        size: 1.1
+        count: 4
+        spread: 0.22
+        height: 0.12
+
+  mint:
+    display: "Mint"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#8DFFC8", "#D6FFEA", "#5EEAD4"]
+        size: 1.1
+        count: 4
+        spread: 0.22
+        height: 0.12
+
+  blueberry:
+    display: "Blueberry"
+    interval: 2
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#4C6FFF", "#7AA2FF"]
+        to: ["#9B5BFF", "#B39DFF"]
+        size: 1.2
+        count: 4
+        spread: 0.22
+        height: 0.12
+
+  lemon_lime:
+    display: "Lemon Lime"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#F7FF3C", "#9BFF3C", "#FFFFFF"]
+        size: 1.1
+        count: 4
+        spread: 0.22
+        height: 0.12
+
+  rose_gold:
+    display: "Rose Gold"
+    layers:
+      - particle: DUST
+        colors: ["#F4B6A6", "#E8A0A0", "#FFD8C9"]
+        size: 1.1
+        count: 4
+        spread: 0.2
+        height: 0.12
+      - particle: WAX_ON
+        count: 1
+        spread: 0.2
+        height: 0.15
+
+  gold:
+    display: "Gold"
+    layers:
+      - particle: DUST
+        colors: ["#FFD700", "#FFB300", "#FFF1A8"]
+        size: 1.1
+        count: 4
+        spread: 0.2
+        height: 0.12
+      - particle: WAX_ON
+        count: 1
+        spread: 0.2
+        height: 0.15
+
+  emerald:
+    display: "Emerald"
+    layers:
+      - particle: DUST
+        colors: ["#2ECC71", "#7DFFB0", "#1B9E5A"]
+        size: 1.1
+        count: 4
+        spread: 0.2
+        height: 0.12
+      - particle: HAPPY_VILLAGER
+        count: 1
+        spread: 0.2
+        height: 0.2
+
+  diamond:
+    display: "Diamond"
+    layers:
+      - particle: DUST
+        colors: ["#6FF3FF", "#B9FBFF", "#FFFFFF"]
+        size: 1.0
+        count: 4
+        spread: 0.2
+        height: 0.12
+      - particle: END_ROD
+        count: 1
+        spread: 0.2
+        height: 0.15
+        speed: 0.01
+
+  ruby:
+    display: "Ruby"
+    layers:
+      - particle: DUST
+        colors: ["#FF2E4D", "#FF7A8A", "#B0102A"]
+        size: 1.1
+        count: 4
+        spread: 0.2
+        height: 0.12
+
+  amethyst:
+    display: "Amethyst"
+    layers:
+      - particle: DUST
+        colors: ["#9B59FF", "#C9A0FF", "#6C3BD6"]
+        size: 1.1
+        count: 4
+        spread: 0.2
+        height: 0.12
+      - particle: ENCHANT
+        count: 2
+        spread: 0.3
+        height: 0.4
+
+  obsidian:
+    display: "Obsidian"
+    layers:
+      - particle: DUST
+        colors: ["#1A0F2E", "#3B1F63", "#0B0614"]
+        size: 1.3
+        count: 4
+        spread: 0.22
+        height: 0.12
+      - particle: PORTAL
+        count: 2
+        spread: 0.2
+        height: 0.3
+
+  fire:
+    display: "Fire"
+    interval: 2
+    layers:
+      - particle: FLAME
+        count: 2
+        spread: 0.18
+        height: 0.05
+        speed: 0.01
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#FF3B00", "#FF9500"]
+        to: ["#FFD000", "#FF5E00"]
+        size: 1.0
+        count: 2
+        spread: 0.2
+        height: 0.15
+
+  soul_fire:
+    display: "Soul Fire"
+    interval: 2
+    layers:
+      - particle: SOUL_FIRE_FLAME
+        count: 2
+        spread: 0.18
+        height: 0.05
+        speed: 0.01
+      - particle: DUST
+        colors: ["#3DE1FF", "#8AF0FF"]
+        size: 1.0
+        count: 2
+        spread: 0.2
+        height: 0.15
+
+  frost:
+    display: "Frost"
+    layers:
+      - particle: SNOWFLAKE
+        count: 2
+        spread: 0.25
+        height: 0.2
+        speed: 0.01
+      - particle: DUST
+        colors: ["#D8F6FF", "#9FE3FF", "#FFFFFF"]
+        size: 1.0
+        count: 2
+        spread: 0.22
+        height: 0.12
+
+  storm:
+    display: "Storm"
+    layers:
+      - particle: ELECTRIC_SPARK
+        count: 2
+        spread: 0.3
+        height: 0.2
+        speed: 0.2
+      - particle: DUST
+        colors: ["#6C7A89", "#B5C7D9"]
+        size: 1.2
+        count: 2
+        spread: 0.25
+        height: 0.12
+
+  hearts:
+    display: "Hearts"
+    interval: 4
+    layers:
+      - particle: HEART
+        count: 1
+        spread: 0.25
+        height: 0.3
+      - particle: DUST
+        colors: ["#FF8FB8", "#FFC2D9"]
+        size: 1.0
+        count: 2
+        spread: 0.2
+        height: 0.15
+
+  music:
+    display: "Music"
+    interval: 4
+    layers:
+      - particle: NOTE
+        count: 0
+        notes: [0, 3, 6, 9, 12, 15, 18, 21, 24]
+        offset: [0, 1.2, 0]
+      - particle: DUST
+        colors: ["#FFFFFF", "#FFE0F0"]
+        size: 0.8
+        count: 1
+        spread: 0.2
+        height: 0.1
+
+  cherry_blossom:
+    display: "Cherry Blossom"
+    layers:
+      - particle: CHERRY_LEAVES
+        count: 2
+        spread: 0.3
+        height: 0.3
+      - particle: DUST
+        colors: ["#FFC2DC", "#FFFFFF"]
+        size: 1.0
+        count: 2
+        spread: 0.22
+        height: 0.12
+
+  stardust:
+    display: "Stardust"
+    interval: 2
+    layers:
+      - particle: END_ROD
+        count: 2
+        spread: 0.3
+        height: 0.4
+        speed: 0.02
+      - particle: DUST
+        colors: ["#FFF3B0", "#FFFFFF", "#FFD1F0"]
+        size: 0.9
+        count: 3
+        spread: 0.3
+        height: 0.3
+
+  galaxy:
+    display: "Galaxy"
+    interval: 2
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#5B2BFF", "#B517FF"]
+        to: ["#1B0A66", "#FF4FD8"]
+        size: 1.2
+        count: 3
+        spread: 0.28
+        height: 0.2
+      - particle: END_ROD
+        shape: HELIX
+        count: 1
+        height: 1.8
+        radius: 0.45
+      - particle: DUST
+        colors: ["#FFFFFF"]
+        size: 0.6
+        count: 1
+        spread: 0.4
+        height: 0.6
+
+  void:
+    display: "Void"
+    layers:
+      - particle: REVERSE_PORTAL
+        count: 3
+        spread: 0.25
+        height: 0.3
+        speed: 0.05
+      - particle: DUST
+        colors: ["#2B0B4F", "#000000"]
+        size: 1.4
+        count: 2
+        spread: 0.22
+        height: 0.12
+
+  firefly:
+    display: "Firefly"
+    layers:
+      - particle: GLOW
+        count: 1
+        spread: 0.6
+        height: 0.8
+        speed: 0.01
+      - particle: DUST
+        colors: ["#D9FF6A", "#F7FF9A"]
+        size: 0.7
+        count: 1
+        spread: 0.5
+        height: 0.7
+
+  spring:
+    display: "Spring"
+    layers:
+      - particle: CHERRY_LEAVES
+        count: 1
+        spread: 0.3
+        height: 0.3
+      - particle: HAPPY_VILLAGER
+        count: 1
+        spread: 0.3
+        height: 0.3
+      - particle: DUST
+        colors: ["#B7F5A8", "#FFD1E8", "#FFF7A8"]
+        size: 1.0
+        count: 3
+        spread: 0.24
+        height: 0.14
+
+  rainbow:
+    display: "Rainbow"
+    interval: 2
+    layers:
+      - particle: DUST
+        colors: ["#FF3B3B", "#FF9F1C", "#FFF200", "#3BFF6A", "#3BC8FF", "#5B6CFF", "#C43BFF"]
+        size: 1.2
+        shape: RING
+        radius: 0.35
+        points: 3
+        offset: [0, 0.08, 0]
+
+  twin_helix:
+    display: "Twin Helix"
+    interval: 1
+    layers:
+      - particle: DUST
+        colors: ["#FF7AE0", "#7AD7FF"]
+        size: 1.0
+        shape: HELIX
+        height: 1.8
+        radius: 0.45
+        count: 1
+
+  halo:
+    display: "Halo"
+    interval: 2
+    moving: false
+    layers:
+      - particle: DUST
+        colors: ["#FFF3A0", "#FFFFFF"]
+        size: 0.9
+        shape: ORBIT
+        radius: 0.38
+        offset: [0, 1.95, 0]
+        count: 1
+      - particle: END_ROD
+        shape: ORBIT
+        radius: 0.38
+        offset: [0, 1.95, 0]
+        count: 1
+
+  orbit:
+    display: "Orbit"
+    interval: 1
+    moving: false
+    layers:
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#00E5FF"]
+        to: ["#B14DFF"]
+        size: 1.0
+        shape: ORBIT
+        radius: 0.6
+        offset: [0, 0.9, 0]
+        count: 1
+      - particle: END_ROD
+        shape: ORBIT
+        radius: 0.6
+        offset: [0, 0.9, 0]
+        count: 1
+
+  ring_of_fire:
+    display: "Ring of Fire"
+    interval: 2
+    moving: false
+    layers:
+      - particle: FLAME
+        shape: RING
+        radius: 0.5
+        points: 5
+        offset: [0, 0.1, 0]
+      - particle: DUST_COLOR_TRANSITION
+        colors: ["#FF6A00"]
+        to: ["#FFD000"]
+        size: 1.0
+        shape: RING
+        radius: 0.5
+        points: 3
+        offset: [0, 0.15, 0]

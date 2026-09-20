@@ -1,0 +1,24 @@
+name: Shimmer
+version: '${version}'
+main: dev.shimmer.ShimmerPlugin
+api-version: '1.21'
+description: Light, colourful particle trails
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  trail:
+    description: Pick and control your trail
+    usage: /<command> <name> | off | toggle | visibility | list
+    aliases: [trails]
+
+permissions:
+  shimmer.use:
+    description: Use /trail
+    default: true
+  shimmer.admin:
+    description: Reload, and set or clear the trail of other players
+    default: op
+  shimmer.trail.*:
+    description: Use every trail
+    default: op
