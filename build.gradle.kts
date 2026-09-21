@@ -3,7 +3,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.1.0"
 }
 
-group = "dev.shimmer"
+group = "dev.pixie"
 version = property("pluginVersion") as String
 
 repositories {
@@ -44,7 +44,7 @@ tasks {
     }
 
     jar {
-        archiveFileName = "Shimmer-${project.version}.jar"
+        archiveFileName = "Pixie-${project.version}.jar"
     }
 
     runServer {

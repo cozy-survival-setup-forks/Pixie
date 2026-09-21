@@ -1,6 +1,6 @@
-package dev.shimmer;
+package dev.pixie;
 
-import dev.shimmer.util.Text;
+import dev.pixie.util.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,10 +14,10 @@ import java.util.Map;
 /** The texts in lang.yml. A text missing from an older file falls back to the default one. */
 public final class Messages {
 
-    private final ShimmerPlugin plugin;
+    private final PixiePlugin plugin;
     private FileConfiguration file = new YamlConfiguration();
 
-    Messages(ShimmerPlugin plugin) {
+    Messages(PixiePlugin plugin) {
         this.plugin = plugin;
     }
 

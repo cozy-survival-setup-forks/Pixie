@@ -1,4 +1,4 @@
-package dev.shimmer.util;
+package dev.pixie.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;

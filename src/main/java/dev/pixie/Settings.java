@@ -1,4 +1,4 @@
-package dev.shimmer;
+package dev.pixie;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;

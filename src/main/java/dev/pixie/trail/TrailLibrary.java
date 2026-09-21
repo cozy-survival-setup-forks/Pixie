@@ -1,4 +1,4 @@
-package dev.shimmer.trail;
+package dev.pixie.trail;
 
 import org.jetbrains.annotations.Nullable;
 

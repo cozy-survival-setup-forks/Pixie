@@ -1,7 +1,7 @@
-package dev.shimmer.hook;
+package dev.pixie.hook;
 
-import dev.shimmer.ShimmerPlugin;
-import dev.shimmer.trail.Trail;
+import dev.pixie.PixiePlugin;
+import dev.pixie.trail.Trail;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,25 +10,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 /**
- * %shimmer_id%, %shimmer_display%, %shimmer_paused%, %shimmer_hidden%, and for menus %shimmer_equipped_&lt;id&gt;% and
- * %shimmer_owned_&lt;id&gt;%.
+ * %pixie_id%, %pixie_display%, %pixie_paused%, %pixie_hidden%, and for menus %pixie_equipped_&lt;id&gt;% and
+ * %pixie_owned_&lt;id&gt;%.
  */
-public final class ShimmerExpansion extends PlaceholderExpansion {
+public final class PixieExpansion extends PlaceholderExpansion {
 
-    private final ShimmerPlugin plugin;
+    private final PixiePlugin plugin;
 
-    public ShimmerExpansion(ShimmerPlugin plugin) {
+    public PixieExpansion(PixiePlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return "shimmer";
+        return "pixie";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "Shimmer";
+        return "Pixie";
     }
 
     @Override

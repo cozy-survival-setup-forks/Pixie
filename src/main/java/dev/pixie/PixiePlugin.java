@@ -1,10 +1,10 @@
-package dev.shimmer;
+package dev.pixie;
 
-import dev.shimmer.command.TrailCommand;
-import dev.shimmer.hook.ShimmerExpansion;
-import dev.shimmer.trail.Trail;
-import dev.shimmer.trail.TrailLibrary;
-import dev.shimmer.trail.TrailParser;
+import dev.pixie.command.TrailCommand;
+import dev.pixie.hook.PixieExpansion;
+import dev.pixie.trail.Trail;
+import dev.pixie.trail.TrailLibrary;
+import dev.pixie.trail.TrailParser;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -13,10 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 /**
- * Shimmer: particle trails. The trails are in trails.yml, and a player's choice is kept on the player, so there is no
+ * Pixie: particle trails. The trails are in trails.yml, and a player's choice is kept on the player, so there is no
  * database.
  */
-public final class ShimmerPlugin extends JavaPlugin {
+public final class PixiePlugin extends JavaPlugin {
 
     private Settings settings;
     private Messages messages;
@@ -36,7 +36,7 @@ public final class ShimmerPlugin extends JavaPlugin {
 
         emitter = new Emitter(this);
         emitter.start();
-        getServer().getPluginManager().registerEvents(new ShimmerListener(this), this);
+        getServer().getPluginManager().registerEvents(new PixieListener(this), this);
 
         var command = getCommand("trail");
         if (command != null) {
@@ -45,7 +45,7 @@ public final class ShimmerPlugin extends JavaPlugin {
             command.setTabCompleter(handler);
         }
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new ShimmerExpansion(this).register();
+            new PixieExpansion(this).register();
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) load(player);
@@ -71,7 +71,7 @@ public final class ShimmerPlugin extends JavaPlugin {
 
     public boolean canUse(Player player, Trail trail) {
         if (!settings.usePermissions()) return true;
-        return player.hasPermission(trail.permission()) || player.hasPermission("shimmer.trail.*");
+        return player.hasPermission(trail.permission()) || player.hasPermission("pixie.trail.*");
     }
 
     /** Gives the player a trail and remembers it. */

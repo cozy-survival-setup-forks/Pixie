@@ -1,4 +1,4 @@
-package dev.shimmer.trail;
+package dev.pixie.trail;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -69,7 +69,7 @@ public final class TrailParser {
         }
 
         int interval = Math.max(1, entry.getInt("interval", 3));
-        String permission = entry.getString("permission", "shimmer.trail.{id}").replace("{id}", id);
+        String permission = entry.getString("permission", "pixie.trail.{id}").replace("{id}", id);
         return new Trail(id, entry.getString("display", prettyName(id)), permission, interval,
                 entry.getBoolean("moving", true), List.copyOf(layers));
     }
@@ -150,7 +150,7 @@ public final class TrailParser {
                 }
             }
         } else {
-            log.warning(where + "uses " + particle + ", which needs data Shimmer does not support. Skipping it.");
+            log.warning(where + "uses " + particle + ", which needs data Pixie does not support. Skipping it.");
             return null;
         }
 

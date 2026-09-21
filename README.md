@@ -1,4 +1,4 @@
-# Shimmer
+# Pixie
 
 Light, colourful particle trails for Paper 1.21+. Every trail is written in one file, `trails.yml`, and there is no
 built-in menu: build one with DeluxeMenus (or any menu plugin) using the commands and placeholders below.
@@ -57,17 +57,17 @@ A trail has an `interval` (ticks between two puffs) and layers. Each layer is on
 
 ## Permissions
 
-- `shimmer.trail.<id>`: use one trail (or set your own with `permission:`)
-- `shimmer.trail.*`: use all of them (op by default)
-- `shimmer.use`: use `/trail` (everybody)
-- `shimmer.admin`: reload, set
+- `pixie.trail.<id>`: use one trail (or set your own with `permission:`)
+- `pixie.trail.*`: use all of them (op by default)
+- `pixie.use`: use `/trail` (everybody)
+- `pixie.admin`: reload, set
 
 Set `use-permissions: false` in `config.yml` to let everybody use every trail.
 
 ## Placeholders (PlaceholderAPI)
 
-`%shimmer_id%`, `%shimmer_display%`, `%shimmer_paused%`, `%shimmer_hidden%`, and for menus `%shimmer_equipped_<id>%`
-and `%shimmer_owned_<id>%` (`true` or `false`).
+`%pixie_id%`, `%pixie_display%`, `%pixie_paused%`, `%pixie_hidden%`, and for menus `%pixie_equipped_<id>%`
+and `%pixie_owned_<id>%` (`true` or `false`).
 
 ## Why it is light
 

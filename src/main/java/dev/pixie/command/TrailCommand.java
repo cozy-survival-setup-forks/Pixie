@@ -1,7 +1,7 @@
-package dev.shimmer.command;
+package dev.pixie.command;
 
-import dev.shimmer.ShimmerPlugin;
-import dev.shimmer.trail.Trail;
+import dev.pixie.PixiePlugin;
+import dev.pixie.trail.Trail;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,11 +20,11 @@ import java.util.Map;
  */
 public final class TrailCommand implements TabExecutor {
 
-    private static final String ADMIN = "shimmer.admin";
+    private static final String ADMIN = "pixie.admin";
 
-    private final ShimmerPlugin plugin;
+    private final PixiePlugin plugin;
 
-    public TrailCommand(ShimmerPlugin plugin) {
+    public TrailCommand(PixiePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -54,7 +54,7 @@ public final class TrailCommand implements TabExecutor {
     private void player(CommandSender sender, java.util.function.Consumer<Player> action) {
         if (!(sender instanceof Player player)) {
             plugin.messages().send(sender, "players-only");
-        } else if (!player.hasPermission("shimmer.use")) {
+        } else if (!player.hasPermission("pixie.use")) {
             plugin.messages().send(sender, "no-permission");
         } else {
             action.accept(player);

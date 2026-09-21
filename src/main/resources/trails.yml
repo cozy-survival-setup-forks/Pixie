@@ -1,12 +1,12 @@
-# Shimmer trails. This file holds trails and nothing else.
+# Pixie trails. This file holds trails and nothing else.
 #
 # Each trail has a display name and layers of particles that are sent while the player moves.
-# A player needs the permission shimmer.trail.<id> (shimmer.trail.* gives all of them), or the one written in `permission`.
+# A player needs the permission pixie.trail.<id> (pixie.trail.* gives all of them), or the one written in `permission`.
 # Players pick one with /trail <id>.
 #
 # Trail settings
 #   display      the name in /trail list and menus (default: the id)
-#   permission   replaces shimmer.trail.<id>
+#   permission   replaces pixie.trail.<id>
 #   interval     ticks between two puffs (default 3). Bigger is lighter for everybody's connection
 #   moving       false to show the trail even when the player stands still (default true)
 #

@@ -1,4 +1,4 @@
-package dev.shimmer;
+package dev.pixie;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,11 +8,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /** Gives a player their trail when they join, and takes it off when they leave. */
-public final class ShimmerListener implements Listener {
+public final class PixieListener implements Listener {
 
-    private final ShimmerPlugin plugin;
+    private final PixiePlugin plugin;
 
-    ShimmerListener(ShimmerPlugin plugin) {
+    PixieListener(PixiePlugin plugin) {
         this.plugin = plugin;
     }
 

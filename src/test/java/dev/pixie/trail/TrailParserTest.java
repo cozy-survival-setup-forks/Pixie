@@ -1,4 +1,4 @@
-package dev.shimmer.trail;
+package dev.pixie.trail;
 
 import org.bukkit.Color;
 import org.bukkit.Particle;
@@ -67,7 +67,7 @@ class TrailParserTest {
         Trail trail = trails.get(0);
         assertEquals("pink_mix", trail.id());
         assertEquals("Pink Mix", trail.display());
-        assertEquals("shimmer.trail.pink_mix", trail.permission());
+        assertEquals("pixie.trail.pink_mix", trail.permission());
         assertEquals(2, trail.interval());
         assertFalse(trail.movingOnly());
 

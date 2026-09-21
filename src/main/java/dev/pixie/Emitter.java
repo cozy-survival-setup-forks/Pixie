@@ -1,6 +1,6 @@
-package dev.shimmer;
+package dev.pixie;
 
-import dev.shimmer.trail.Trail;
+import dev.pixie.trail.Trail;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
@@ -51,7 +51,7 @@ public final class Emitter {
     private static final int GRACE_TICKS = 6;
     private static final double MOVED = 0.0025;
 
-    private final ShimmerPlugin plugin;
+    private final PixiePlugin plugin;
     private final Map<UUID, Wearer> wearers = new HashMap<>();
     private final List<Wearer> order = new ArrayList<>();
     /** Players who turned off seeing trails. */
@@ -60,7 +60,7 @@ public final class Emitter {
     private long tick;
     private int turn;
 
-    Emitter(ShimmerPlugin plugin) {
+    Emitter(PixiePlugin plugin) {
         this.plugin = plugin;
     }
 

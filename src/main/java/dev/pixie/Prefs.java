@@ -1,4 +1,4 @@
-package dev.shimmer;
+package dev.pixie;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ public final class Prefs {
     private final NamespacedKey paused;
     private final NamespacedKey hidden;
 
-    Prefs(ShimmerPlugin plugin) {
+    Prefs(PixiePlugin plugin) {
         this.trail = new NamespacedKey(plugin, "trail");
         this.paused = new NamespacedKey(plugin, "paused");
         this.hidden = new NamespacedKey(plugin, "hidden");

@@ -1,4 +1,4 @@
-# Shimmer
+# Pixie
 #
 # The trails are in trails.yml and the texts in lang.yml. Reload both with /trail reload.
 
@@ -11,7 +11,7 @@ disabled-worlds: []
 # Show the trail of a player who is invisible (a potion). Vanished players never show one.
 show-when-invisible: false
 
-# Particles cost the connection of every player nearby, so Shimmer is careful with them.
+# Particles cost the connection of every player nearby, so Pixie is careful with them.
 performance:
   # The most puffs sent in one tick for the whole server. What does not fit waits for the next tick, and everybody
   # gets a fair turn.
