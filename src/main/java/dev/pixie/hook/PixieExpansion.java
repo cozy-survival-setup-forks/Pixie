@@ -28,7 +28,7 @@ public final class PixieExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Pixie";
+        return String.join(", ", plugin.getPluginMeta().getAuthors());
     }
 
     @Override

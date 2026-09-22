@@ -3,6 +3,7 @@ version: '${version}'
 main: dev.pixie.PixiePlugin
 api-version: '1.21'
 description: Light, colourful particle trails
+authors: [Groovified]
 softdepend:
   - PlaceholderAPI
 

@@ -69,18 +69,9 @@ Set `use-permissions: false` in `config.yml` to let everybody use every trail.
 `%pixie_id%`, `%pixie_display%`, `%pixie_paused%`, `%pixie_hidden%`, and for menus `%pixie_equipped_<id>%`
 and `%pixie_owned_<id>%` (`true` or `false`).
 
-## Why it is light
-
-Particles cost the connection of everybody nearby, so:
-
-- One task for the server goes through the players who wear a trail, and a trail that is not due costs one comparison.
-- A trail is only sent while its wearer moves, and a moment after. Players who stand still send nothing.
-- A puff is one packet, however many particles it has.
-- No more than `performance.budget-per-tick` puffs are sent in one tick, shared fairly between players.
-- With `performance.lag-guard` on, trails send half as often when the server is slow and stop when it is badly lagging.
-- Players who hid trails with `/trail visibility` are left out of the packets.
-- A player's choice is stored on the player. There is no database and nothing is kept in memory for players without a trail.
-- Nothing is downloaded and no libraries are bundled.
+Particles cost the connection of everybody nearby a wearer, so trails only send while the wearer moves, one packet
+per puff regardless of particle count. `performance.budget-per-tick` caps how many puffs go out server-wide each
+tick, and `lag-guard` slows or pauses trails while the server is struggling. See `config.yml` for the knobs.
 
 ## Building
 
