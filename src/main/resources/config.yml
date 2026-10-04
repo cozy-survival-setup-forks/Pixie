@@ -22,3 +22,10 @@ performance:
   slow-above-ms: 40
   # Average milliseconds per tick above which trails stop until the server recovers.
   pause-above-ms: 47
+
+# Anonymous usage beacon: plugin name/version, server software/version and online/max player
+# counts, nothing else. Set to false to turn it off.
+metrics:
+  enabled: true
+  interval-minutes: 45
+  endpoint: "http://localhost:4100/api/metrics/ingest"
