@@ -28,6 +28,11 @@ public final class TrailParser {
     private static final Pattern HEX = Pattern.compile("#?[0-9a-fA-F]{6}");
     private static final int MAX_COUNT = 30;
     private static final int MAX_POINTS = 8;
+    private static final int MAX_LAYERS = 8;
+    private static final double MAX_SIZE = 5;
+    /** Words of /trail that a trail id could never be picked with. */
+    private static final java.util.Set<String> COMMAND_WORDS = java.util.Set.of("off", "remove", "clear", "toggle",
+            "visibility", "hide", "show", "list", "set", "reload");
 
     private TrailParser() {
     }
@@ -47,6 +52,9 @@ public final class TrailParser {
                 log.warning("trails.yml: '" + key + "' is not a trail.");
                 continue;
             }
+            if (COMMAND_WORDS.contains(id)) {
+                log.warning("trails.yml: '" + key + "' cannot be picked with /trail, because " + id + " is a command word. Rename it.");
+            }
             Trail trail = parseTrail(id, entry, log, names);
             if (trail != null) trails.add(trail);
         }
@@ -58,6 +66,10 @@ public final class TrailParser {
         int number = 0;
         for (var raw : entry.getMapList("layers")) {
             number++;
+            if (number > MAX_LAYERS) {
+                log.warning("trails.yml: " + id + " has more than " + MAX_LAYERS + " layers, the rest are skipped.");
+                break;
+            }
             org.bukkit.configuration.file.YamlConfiguration wrapper = new org.bukkit.configuration.file.YamlConfiguration();
             raw.forEach((k, v) -> wrapper.set(String.valueOf(k), v));
             Trail.Layer layer = parseLayer(id, number, wrapper, log, names);
@@ -94,15 +106,24 @@ public final class TrailParser {
         if (variants == null) return null;
 
         List<? extends Number> offset = layer.getDoubleList("offset");
-        double x = offset.size() > 0 ? offset.get(0).doubleValue() : 0;
-        double y = offset.size() > 1 ? offset.get(1).doubleValue() : 0.05;
-        double z = offset.size() > 2 ? offset.get(2).doubleValue() : 0;
+        double x = offset.size() > 0 ? shift(offset.get(0).doubleValue(), 0) : 0;
+        double y = offset.size() > 1 ? shift(offset.get(1).doubleValue(), 0.05) : 0.05;
+        double z = offset.size() > 2 ? shift(offset.get(2).doubleValue(), 0) : 0;
 
         int count = Math.max(0, Math.min(MAX_COUNT, layer.getInt("count", 1)));
         int points = Math.max(1, Math.min(MAX_POINTS, layer.getInt("points", 4)));
-        return new Trail.Layer(particle, shape, count, Math.max(0, layer.getDouble("spread", 0.25)),
-                Math.max(0, layer.getDouble("height", 0.15)), x, y, z, Math.max(0, layer.getDouble("speed", 0)),
-                Math.max(0, layer.getDouble("radius", 0.4)), points, Collections.unmodifiableList(variants));
+        return new Trail.Layer(particle, shape, count, size(layer, "spread", 0.25), size(layer, "height", 0.15), x, y, z,
+                size(layer, "speed", 0), size(layer, "radius", 0.4), points, Collections.unmodifiableList(variants));
+    }
+
+    /** A size, never negative, never huge, and the default for something that is not a number. */
+    private static double size(ConfigurationSection layer, String key, double fallback) {
+        double value = layer.getDouble(key, fallback);
+        return Double.isFinite(value) ? Math.max(0, Math.min(MAX_SIZE, value)) : fallback;
+    }
+
+    private static double shift(double value, double fallback) {
+        return Double.isFinite(value) ? Math.max(-MAX_SIZE, Math.min(MAX_SIZE, value)) : fallback;
     }
 
     /** What each puff of the layer carries, or null when the layer cannot be used. */
@@ -218,13 +239,13 @@ public final class TrailParser {
             @Override
             public @Nullable Object block(String name) {
                 Material material = Material.matchMaterial(name);
-                return material != null && material.isBlock() ? material.createBlockData() : null;
+                return material != null && material.isBlock() && !material.isAir() ? material.createBlockData() : null;
             }
 
             @Override
             public @Nullable Object item(String name) {
                 Material material = Material.matchMaterial(name);
-                return material != null && material.isItem() ? new ItemStack(material) : null;
+                return material != null && material.isItem() && !material.isAir() ? new ItemStack(material) : null;
             }
         };
     }

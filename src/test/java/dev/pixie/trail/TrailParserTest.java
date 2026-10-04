@@ -45,6 +45,33 @@ class TrailParserTest {
     }
 
     @Test
+    void layersAreCappedAndSizesStayFinite() throws Exception {
+        List<String> warnings = new ArrayList<>();
+        StringBuilder text = new StringBuilder("trails:\n  big:\n    layers:\n");
+        for (int i = 0; i < 12; i++) {
+            text.append("      - particle: end_rod\n        shape: ring\n        points: 8\n        radius: .inf\n        spread: 1.0e9\n        offset: [.nan, 1.0e9, 0]\n");
+        }
+        List<Trail> trails = parse(text.toString(), warnings);
+        assertEquals(1, trails.size());
+        Trail trail = trails.get(0);
+        assertEquals(8, trail.layers().size());
+        assertEquals(64, trail.packets());
+        Trail.Layer layer = trail.layers().get(0);
+        assertEquals(0.4, layer.radius());
+        assertEquals(5, layer.spread());
+        assertEquals(0, layer.x());
+        assertEquals(5, layer.y());
+        assertTrue(warnings.stream().anyMatch(w -> w.contains("more than 8 layers")));
+    }
+
+    @Test
+    void aCommandWordIdIsWarnedAbout() throws Exception {
+        List<String> warnings = new ArrayList<>();
+        parse("trails:\n  list:\n    layers:\n      - particle: end_rod\n", warnings);
+        assertTrue(warnings.stream().anyMatch(w -> w.contains("command word")));
+    }
+
+    @Test
     void aTrailIsReadWithItsLayers() throws Exception {
         List<String> warnings = new ArrayList<>();
         List<Trail> trails = parse("""

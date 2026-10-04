@@ -12,11 +12,13 @@ public final class Prefs {
     private final NamespacedKey trail;
     private final NamespacedKey paused;
     private final NamespacedKey hidden;
+    private final NamespacedKey granted;
 
     Prefs(PixiePlugin plugin) {
         this.trail = new NamespacedKey(plugin, "trail");
         this.paused = new NamespacedKey(plugin, "paused");
         this.hidden = new NamespacedKey(plugin, "hidden");
+        this.granted = new NamespacedKey(plugin, "granted");
     }
 
     public @Nullable String trail(Player player) {
@@ -27,6 +29,17 @@ public final class Prefs {
         PersistentDataContainer data = player.getPersistentDataContainer();
         if (id == null) data.remove(trail);
         else data.set(trail, PersistentDataType.STRING, id);
+    }
+
+    /** The trail an admin gave the player with /trail set, which they may wear without the permission. */
+    public @Nullable String granted(Player player) {
+        return player.getPersistentDataContainer().get(granted, PersistentDataType.STRING);
+    }
+
+    public void setGranted(Player player, @Nullable String id) {
+        PersistentDataContainer data = player.getPersistentDataContainer();
+        if (id == null) data.remove(granted);
+        else data.set(granted, PersistentDataType.STRING, id);
     }
 
     public boolean paused(Player player) {

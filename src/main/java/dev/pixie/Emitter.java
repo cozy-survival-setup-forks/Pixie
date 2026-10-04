@@ -22,8 +22,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * per player except one small object, and a puff that is not due costs a single comparison.
  *
  * <p>The connection of the players is what particles cost, so this is careful: a trail is only sent while its wearer
- * moves, a puff is one packet however many particles it has, the number of puffs per tick has a limit shared fairly, and
- * everything slows down when the server does.</p>
+ * moves (unless it says otherwise), a scatter layer is one packet however many particles it has, the number of packets per
+ * tick has a limit shared fairly, and everything slows down when the server does.</p>
  */
 public final class Emitter {
 
@@ -57,6 +57,7 @@ public final class Emitter {
     /** Players who turned off seeing trails. */
     private final Set<UUID> blind = new HashSet<>();
     private final List<Player> receivers = new ArrayList<>();
+    private final List<Wearer> dropped = new ArrayList<>();
     private long tick;
     private int turn;
 
@@ -126,8 +127,25 @@ public final class Emitter {
             wearer.next = tick + interval;
             if (!due(wearer, interval, settings)) continue;
 
-            budget -= wearer.trail.layers().size();
-            puff(wearer);
+            try {
+                // A permission lost while the player is online ends the trail without waiting for a relog
+                if (!plugin.canUse(wearer.player, wearer.trail)) {
+                    dropped.add(wearer);
+                    continue;
+                }
+                budget -= wearer.trail.packets();
+                puff(wearer);
+            } catch (RuntimeException e) {
+                plugin.getLogger().warning("The trail " + wearer.trail.id() + " of " + wearer.player.getName()
+                        + " could not be sent and was taken off: " + e);
+                dropped.add(wearer);
+            }
+        }
+        if (!dropped.isEmpty()) {
+            for (Wearer wearer : dropped) {
+                remove(wearer.player);
+            }
+            dropped.clear();
         }
     }
 
@@ -136,7 +154,7 @@ public final class Emitter {
         Player player = wearer.player;
         if (!player.isOnline() || player.getGameMode() == GameMode.SPECTATOR) return false;
         if (settings.isDisabled(player.getWorld())) return false;
-        if (player.hasMetadata("vanished")) return false;
+        if (vanished(player)) return false;
         if (player.isInvisible() && !settings.showWhenInvisible()) return false;
 
         if (wearer.trail.movingOnly()) {
@@ -156,6 +174,15 @@ public final class Emitter {
         return true;
     }
 
+    /** Some plugins leave the metadata behind with the value false when a player shows again. */
+    private static boolean vanished(Player player) {
+        if (!player.hasMetadata("vanished")) return false;
+        for (var value : player.getMetadata("vanished")) {
+            if (value.asBoolean()) return true;
+        }
+        return false;
+    }
+
     private void puff(Wearer wearer) {
         Player player = wearer.player;
         World world = player.getWorld();
@@ -164,26 +191,24 @@ public final class Emitter {
         double z = player.getZ();
         int puff = wearer.puffs++;
 
-        boolean filtered = !blind.isEmpty();
-        if (filtered) {
-            receivers.clear();
-            if (!blind.contains(player.getUniqueId())) receivers.add(player);
-            for (Player viewer : player.getTrackedBy()) {
-                if (!blind.contains(viewer.getUniqueId())) receivers.add(viewer);
-            }
-            if (receivers.isEmpty()) return;
+        // Only the wearer and the players who can see them, so a hidden or vanished wearer shows nothing
+        receivers.clear();
+        if (!blind.contains(player.getUniqueId())) receivers.add(player);
+        for (Player viewer : player.getTrackedBy()) {
+            if (!blind.contains(viewer.getUniqueId())) receivers.add(viewer);
         }
+        if (receivers.isEmpty()) return;
 
         for (Trail.Layer layer : wearer.trail.layers()) {
             Object data = layer.data(puff);
             switch (layer.shape()) {
-                case SCATTER -> send(world, player, filtered, layer, x + layer.x(), y + layer.y(), z + layer.z(),
+                case SCATTER -> send(world, player, layer, x + layer.x(), y + layer.y(), z + layer.z(),
                         layer.count(), layer.spread(), layer.height(), layer.spread(), data);
                 case RING -> {
                     double turn = puff * 0.35;
                     for (int i = 0; i < layer.points(); i++) {
                         double angle = turn + i * (2 * Math.PI / layer.points());
-                        send(world, player, filtered, layer, x + layer.x() + Math.cos(angle) * layer.radius(), y + layer.y(),
+                        send(world, player, layer, x + layer.x() + Math.cos(angle) * layer.radius(), y + layer.y(),
                                 z + layer.z() + Math.sin(angle) * layer.radius(), 1, 0, 0, 0, data);
                     }
                 }
@@ -192,35 +217,30 @@ public final class Emitter {
                     double angle = puff * 0.55;
                     for (int i = 0; i < 2; i++) {
                         double a = angle + i * Math.PI;
-                        send(world, player, filtered, layer, x + layer.x() + Math.cos(a) * layer.radius(), y + layer.y() + climb,
+                        send(world, player, layer, x + layer.x() + Math.cos(a) * layer.radius(), y + layer.y() + climb,
                                 z + layer.z() + Math.sin(a) * layer.radius(), 1, 0, 0, 0, data);
                     }
                 }
                 case ORBIT -> {
                     double angle = puff * 0.5;
-                    send(world, player, filtered, layer, x + layer.x() + Math.cos(angle) * layer.radius(), y + layer.y(),
+                    send(world, player, layer, x + layer.x() + Math.cos(angle) * layer.radius(), y + layer.y(),
                             z + layer.z() + Math.sin(angle) * layer.radius(), 1, 0, 0, 0, data);
                 }
             }
         }
     }
 
-    /** One packet. With nobody hiding trails the server picks the viewers by distance, with the list it uses the list. */
-    private void send(World world, Player owner, boolean filtered, Trail.Layer layer, double x, double y, double z, int count,
+    /** One particle call, sent to the receivers only. */
+    private void send(World world, Player owner, Trail.Layer layer, double x, double y, double z, int count,
                       double ox, double oy, double oz, @Nullable Object data) {
         Particle particle = layer.particle();
         double speed = layer.speed();
         if (particle == Particle.NOTE) {
             // A note is coloured by its offset, with a count of zero
             double note = data instanceof Integer value ? value / 24.0 : ThreadLocalRandom.current().nextDouble();
-            if (filtered) world.spawnParticle(particle, receivers, owner, x, y, z, 0, note, 0, 0, 1.0, null);
-            else world.spawnParticle(particle, x, y, z, 0, note, 0, 0, 1.0);
+            world.spawnParticle(particle, receivers, owner, x, y, z, 0, note, 0, 0, 1.0, null);
             return;
         }
-        if (filtered) {
-            world.spawnParticle(particle, receivers, owner, x, y, z, count, ox, oy, oz, speed, data);
-        } else {
-            world.spawnParticle(particle, x, y, z, count, ox, oy, oz, speed, data);
-        }
+        world.spawnParticle(particle, receivers, owner, x, y, z, count, ox, oy, oz, speed, data);
     }
 }

@@ -20,6 +20,7 @@ admin-set: "&fGave %player% the trail &#FFE066%trail%&f."
 admin-cleared: "&fRemoved the trail of %player%."
 player-not-found: "&cThat player is not online."
 reloaded: "&fReloaded. There are %amount% trails."
+reload-failed: "&cA file could not be read, so nothing changed. See the console."
 
 usage:
   - "&#FF9BD2&lTrails"

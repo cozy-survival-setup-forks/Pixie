@@ -10,6 +10,15 @@ import java.util.List;
  */
 public record Trail(String id, String display, String permission, int interval, boolean movingOnly, List<Layer> layers) {
 
+    /** How many particle calls one puff of the whole trail makes. */
+    public int packets() {
+        int total = 0;
+        for (Layer layer : layers) {
+            total += layer.packets();
+        }
+        return total;
+    }
+
     /** How the particles of a layer are placed around the player. */
     public enum Shape {
         /** A cloud around the feet. */
@@ -30,6 +39,15 @@ public record Trail(String id, String display, String permission, int interval, 
      */
     public record Layer(Particle particle, Shape shape, int count, double spread, double height, double x, double y,
                         double z, double speed, double radius, int points, List<Object> variants) {
+
+        /** How many particle calls one puff of this layer makes. */
+        public int packets() {
+            return switch (shape) {
+                case RING -> points;
+                case HELIX -> 2;
+                default -> 1;
+            };
+        }
 
         /** What the particle carries on puff number {@code puff}. */
         public Object data(int puff) {

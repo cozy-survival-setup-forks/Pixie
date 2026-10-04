@@ -69,9 +69,11 @@ Set `use-permissions: false` in `config.yml` to let everybody use every trail.
 `%pixie_id%`, `%pixie_display%`, `%pixie_paused%`, `%pixie_hidden%`, and for menus `%pixie_equipped_<id>%`
 and `%pixie_owned_<id>%` (`true` or `false`).
 
-Particles cost the connection of everybody nearby a wearer, so trails only send while the wearer moves, one packet
-per puff regardless of particle count. `performance.budget-per-tick` caps how many puffs go out server-wide each
-tick, and `lag-guard` slows or pauses trails while the server is struggling. See `config.yml` for the knobs.
+Particles cost the connection of everybody nearby a wearer, so trails only send while the wearer moves (unless a trail
+says `moving: false`), and a scatter layer is one packet whatever its particle count. A rich trail costs more: a ring
+sends one packet per point and a helix two, a trail may have up to 8 layers. `performance.budget-per-tick` caps how many
+packets go out server-wide each tick, and `lag-guard` slows or pauses trails while the server is struggling. Trails only
+reach the wearer and the players who can see them. See `config.yml` for the knobs.
 
 ## Building
 

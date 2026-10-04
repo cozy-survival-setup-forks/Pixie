@@ -19,6 +19,7 @@ public final class PixieListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        plugin.emitter().setBlind(player, plugin.prefs().hidden(player));
         // A moment later, when the player has finished loading in and their permissions are there
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (player.isOnline()) plugin.load(player);

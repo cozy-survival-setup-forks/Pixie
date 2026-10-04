@@ -75,7 +75,7 @@ public final class TrailCommand implements TabExecutor {
 
     /** Pauses or brings back the player's own trail, and remembers which trail it was. */
     private void toggle(Player player) {
-        if (plugin.prefs().trail(player) == null) {
+        if (plugin.trails().get(plugin.prefs().trail(player)) == null) {
             plugin.messages().send(player, "no-trail");
             return;
         }
@@ -111,6 +111,10 @@ public final class TrailCommand implements TabExecutor {
             return;
         }
         int count = plugin.reloadAll();
+        if (count < 0) {
+            plugin.messages().send(sender, "reload-failed");
+            return;
+        }
         plugin.messages().send(sender, "reloaded", Map.of("%amount%", String.valueOf(count)));
     }
 
@@ -135,7 +139,7 @@ public final class TrailCommand implements TabExecutor {
             plugin.messages().send(sender, "unknown-trail");
             return;
         }
-        plugin.equip(target, trail);
+        plugin.grant(target, trail);
         plugin.messages().send(sender, "admin-set", Map.of("%player%", target.getName(), "%trail%", trail.display()));
     }
 
