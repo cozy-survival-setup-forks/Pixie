@@ -81,4 +81,14 @@ reach the wearer and the players who can see them. See `config.yml` for the knob
 ./gradlew build
 ```
 
-The jar is in `build/libs`. Licensed under MIT.
+The jar is in `build/libs`.
+
+## Telemetry
+
+On startup Pixie sends a small anonymous beacon (plugin name/version, server software/version,
+online/max player counts, and a random ID with no player data) so we know which versions are in
+use. Turn it off with `metrics.enabled: false` in `config.yml`.
+
+## License
+
+See `LICENSE`: free to run on your own servers, not for redistribution or resale.
