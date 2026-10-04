@@ -27,6 +27,15 @@ public final class PixiePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        try {
+            enableInner();
+        } catch (RuntimeException e) {
+            getLogger().severe("Pixie could not start: " + e.getMessage() + ". Check config.yml, lang.yml and trails.yml.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+    }
+
+    private void enableInner() {
         saveDefaultConfig();
         settings = new Settings(readYaml("config.yml"));
         messages = new Messages(this);
@@ -53,6 +62,8 @@ public final class PixiePlugin extends JavaPlugin {
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) load(player);
+        Metrics.start(this);
+        Banner.print(this, "Thanks for making the server sparkle.");
     }
 
     @Override
