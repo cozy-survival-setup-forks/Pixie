@@ -45,6 +45,8 @@ public final class TrailCommand implements TabExecutor {
             case "visibility", "hide", "show" -> player(sender, this::visibility);
             case "list" -> player(sender, this::list);
             case "reload" -> reload(sender);
+            case "doctor" -> doctor(sender);
+            case "backup" -> backup(sender, args);
             case "set" -> set(sender, args);
             default -> player(sender, player -> equip(player, first));
         }
@@ -105,6 +107,26 @@ public final class TrailCommand implements TabExecutor {
         }
     }
 
+    private void doctor(CommandSender sender) {
+        if (!sender.hasPermission(ADMIN)) {
+            plugin.messages().send(sender, "no-permission");
+            return;
+        }
+        plugin.doctor().forEach(sender::sendPlainMessage);
+    }
+
+    private void backup(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(ADMIN)) {
+            plugin.messages().send(sender, "no-permission");
+            return;
+        }
+        if (args.length < 2 || !args[1].equalsIgnoreCase("now")) {
+            sender.sendPlainMessage("Use /trail backup now");
+            return;
+        }
+        sender.sendPlainMessage(plugin.backupNow() ? "Backup made and checked." : "The backup FAILED, see the console.");
+    }
+
     private void reload(CommandSender sender) {
         if (!sender.hasPermission(ADMIN)) {
             plugin.messages().send(sender, "no-permission");
@@ -149,7 +171,7 @@ public final class TrailCommand implements TabExecutor {
         boolean admin = sender.hasPermission(ADMIN);
         if (args.length == 1) {
             options.addAll(List.of("off", "toggle", "visibility", "list"));
-            if (admin) options.addAll(List.of("set", "reload"));
+            if (admin) options.addAll(List.of("set", "reload", "doctor", "backup"));
             if (sender instanceof Player player) {
                 plugin.trails().all().stream().filter(trail -> plugin.canUse(player, trail)).forEach(trail -> options.add(trail.id()));
             }

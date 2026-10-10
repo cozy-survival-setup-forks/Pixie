@@ -1,3 +1,4 @@
+config-version: 1
 # Pixie
 #
 # The trails are in trails.yml and the texts in lang.yml. Reload both with /trail reload.
@@ -27,4 +28,3 @@ performance:
 # counts, nothing else. Set to false to turn it off.
 metrics:
   enabled: true
-  interval-minutes: 45

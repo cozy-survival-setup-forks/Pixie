@@ -2,6 +2,13 @@ package dev.pixie;
 
 import dev.pixie.command.TrailCommand;
 import dev.pixie.hook.PixieExpansion;
+import dev.pixie.safe.ConfigMigrator;
+import dev.pixie.safe.Doctor;
+import dev.pixie.safe.FileBackups;
+import dev.pixie.safe.Guard;
+import dev.pixie.safe.Health;
+import dev.pixie.safe.Prep;
+import dev.pixie.safe.ServerId;
 import dev.pixie.trail.Trail;
 import dev.pixie.trail.TrailLibrary;
 import dev.pixie.trail.TrailParser;
@@ -11,12 +18,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Pixie: particle trails. The trails are in trails.yml, and a player's choice is kept on the player, so there is no
  * database.
  */
 public final class PixiePlugin extends JavaPlugin {
+
+    private static final int CONFIG_VERSION = 1;
+    private static final int LANG_VERSION = 1;
+
+    private final List<Prep.Spec> files = List.of(
+            new Prep.Spec("config.yml", "config-version", CONFIG_VERSION, Prep.configMigrator(CONFIG_VERSION), null),
+            new Prep.Spec("lang.yml", "lang-version", LANG_VERSION, new ConfigMigrator("lang-version", LANG_VERSION), null));
 
     private Settings settings;
     private Messages messages;
@@ -37,6 +53,8 @@ public final class PixiePlugin extends JavaPlugin {
 
     private void enableInner() {
         saveDefaultConfig();
+        Health.storage("YAML files in the plugin folder (config.yml, lang.yml, trails.yml, data.yml); each player's choice is kept on the player");
+        Prep.startup(this, files);
         settings = new Settings(readYaml("config.yml"));
         messages = new Messages(this);
         if (!messages.load()) {
@@ -62,7 +80,9 @@ public final class PixiePlugin extends JavaPlugin {
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) load(player);
-        Metrics.start(this);
+        boolean beacon = getConfig().getBoolean("metrics.enabled", true);
+        Metrics.start(this, ServerId.resolve(getDataFolder().toPath(),
+                ServerId.inYaml(new File(getDataFolder(), "data.yml").toPath(), getLogger()), beacon, getLogger()));
         Banner.print(this, "Thanks for making the server sparkle.");
     }
 
@@ -134,6 +154,11 @@ public final class PixiePlugin extends JavaPlugin {
 
     /** Reads every file again. Returns how many trails there are, or -1 and changes nothing if a file cannot be read. */
     public int reloadAll() {
+        List<Guard.Problem> problems = Prep.validate(this, files);
+        if (!problems.isEmpty()) {
+            Prep.logRejected(this, problems);
+            return -1;
+        }
         Settings freshSettings;
         TrailLibrary freshTrails;
         try {
@@ -150,6 +175,21 @@ public final class PixiePlugin extends JavaPlugin {
         trails = freshTrails;
         for (Player player : Bukkit.getOnlinePlayers()) load(player);
         return trails.size();
+    }
+
+    /** The text of /trail doctor. */
+    public List<String> doctor() {
+        List<String> extra = new ArrayList<>(Prep.versionLines(this, files));
+        extra.add("Pending writes: 0 (this plugin keeps no queued saves)");
+        return Doctor.report(getName(), getPluginMeta().getVersion(), extra);
+    }
+
+    /** /trail backup now: a verified copy of the settings and data files. */
+    public boolean backupNow() {
+        List<String> names = new ArrayList<>(Prep.fileNames(files));
+        names.add("trails.yml");
+        names.add("data.yml");
+        return FileBackups.snapshot(getDataFolder().toPath(), names, 5, getLogger());
     }
 
     public Settings settings() {

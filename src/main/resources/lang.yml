@@ -1,3 +1,4 @@
+lang-version: 1
 # Texts. MiniMessage, & codes and &#rrggbb all work. Leave one empty to turn it off.
 # %trail% and %player% are filled in.
 
